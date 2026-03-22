@@ -1,6 +1,6 @@
 /**
- * Chrome Screen Analyzer - Popup
- * Authors: Eduardo Arana and Soda 🥤
+ * Chrome Screen Analyzer — Popup
+ * Authors: Eduardo Arana and Soda
  * License: MIT
  */
 
@@ -9,9 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   chrome.runtime.sendMessage({ action: 'checkApiKey' }, (response) => {
     if (response && response.hasKey) {
-      apiStatus.innerHTML = '<span class="status-badge configured">API Key Configured</span>';
+      apiStatus.innerHTML = `
+        <div class="status-row ok">
+          <div class="status-dot"></div>
+          API Key Configured
+        </div>`;
     } else {
-      apiStatus.innerHTML = '<span class="status-badge not-configured">API Key Not Set</span>';
+      apiStatus.innerHTML = `
+        <div class="status-row warn">
+          <div class="status-dot"></div>
+          API Key Not Configured
+        </div>`;
     }
   });
 

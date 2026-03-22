@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screen Analyzer — Test Runner</title>
+  <meta name="description" content="Test page for DOM extraction">
+  <meta property="og:title" content="Test OG Title">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f3f4f6;
+      color: #1f2937;
+      padding: 32px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: #111827; }
+    .subtitle { font-size: 14px; color: #6b7280; margin-bottom: 24px; }
+
+    .suite {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .suite-header {
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #f3f4f6;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .suite-header .badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    .badge-pass { background: #ecfdf5; color: #059669; }
+    .badge-fail { background: #fef2f2; color: #dc2626; }
+    .badge-pending { background: #f3f4f6; color: #6b7280; }
+
+    .suite-body { padding: 0 18px 14px; }
+
+    .test-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 0;
+      font-size: 13px;
+      color: #374151;
+    }
+
+    .test-icon { width: 16px; text-align: center; flex-shrink: 0; }
+    .test-pass .test-icon { color: #059669; }
+    .test-fail .test-icon { color: #dc2626; font-weight: 700; }
+
+    .summary {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      padding: 18px;
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .summary-total { font-size: 28px; font-weight: 700; color: #111827; }
+    .summary-label { font-size: 13px; color: #6b7280; margin-top: 4px; }
+
+    .footer { text-align: center; margin-top: 24px; font-size: 12px; color: #9ca3af; }
+
+    /* Test DOM content for DOM Extractor tests */
+    #test-content { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Screen Analyzer — Test Runner</h1>
+  <p class="subtitle">Unit tests for core library modules</p>
+
+  <div id="results">
+    <div class="suite" id="suite-credential">
+      <div class="suite-header">Credential Manager <span class="badge badge-pending">Running...</span></div>
+      <div class="suite-body"></div>
+    </div>
+    <div class="suite" id="suite-rate">
+      <div class="suite-header">Rate Limiter <span class="badge badge-pending">Running...</span></div>
+      <div class="suite-body"></div>
+    </div>
+    <div class="suite" id="suite-markdown">
+      <div class="suite-header">Markdown Renderer <span class="badge badge-pending">Running...</span></div>
+      <div class="suite-body"></div>
+    </div>
+    <div class="suite" id="suite-dom">
+      <div class="suite-header">DOM Extractor <span class="badge badge-pending">Running...</span></div>
+      <div class="suite-body"></div>
+    </div>
+  </div>
+
+  <div class="summary" id="summary" style="display: none;">
+    <div class="summary-total" id="summary-total">-</div>
+    <div class="summary-label" id="summary-label">tests</div>
+  </div>
+
+  <div class="footer">Chrome Screen Analyzer v2.0 &mdash; By Eduardo Arana &amp; Soda</div>
+
+  <!-- Hidden test DOM content for DOM Extractor -->
+  <div id="test-content">
+    <h2>Test Section</h2>
+    <p>This is test content for DOM extraction.</p>
+    <img src="test.png" alt="Test image" width="100" height="100">
+    <a href="https://example.com">Example Link</a>
+  </div>
+
+  <!-- Mock chrome.storage for non-extension context -->
+  <script>
+    if (typeof chrome === 'undefined' || !chrome.storage) {
+      window.chrome = window.chrome || {};
+      const store = {};
+      const storageApi = {
+        get(keys, cb) {
+          const result = {};
+          const keyArr = Array.isArray(keys) ? keys : [keys];
+          keyArr.forEach(k => { if (store[k] !== undefined) result[k] = store[k]; });
+          if (cb) cb(result);
+          return Promise.resolve(result);
+        },
+        set(items, cb) {
+          Object.assign(store, items);
+          if (cb) cb();
+          return Promise.resolve();
+        },
+        remove(keys, cb) {
+          const keyArr = Array.isArray(keys) ? keys : [keys];
+          keyArr.forEach(k => delete store[k]);
+          if (cb) cb();
+          return Promise.resolve();
+        }
+      };
+      chrome.storage = { local: storageApi, sync: storageApi };
+    }
+  </script>
+
+  <!-- Load libraries -->
+  <script src="../lib/credential-manager.js"></script>
+  <script src="../lib/rate-limiter.js"></script>
+  <script src="../lib/markdown-renderer.js"></script>
+  <script src="../lib/dom-extractor.js"></script>
+
+  <!-- Load tests -->
+  <script src="unit/credential-manager.spec.js"></script>
+  <script src="unit/rate-limiter.spec.js"></script>
+  <script src="unit/markdown-renderer.spec.js"></script>
+  <script src="unit/dom-extractor.spec.js"></script>
+
+  <!-- Render results -->
+  <script>
+    function renderSuite(elementId, testResults) {
+      if (!testResults) return;
+      const suite = document.getElementById(elementId);
+      const header = suite.querySelector('.suite-header');
+      const body = suite.querySelector('.suite-body');
+      const badge = header.querySelector('.badge');
+
+      badge.textContent = `${testResults.passed}/${testResults.total} passed`;
+      badge.className = testResults.failed > 0 ? 'badge badge-fail' : 'badge badge-pass';
+
+      body.innerHTML = testResults.results.map(r => `
+        <div class="test-row ${r.passed ? 'test-pass' : 'test-fail'}">
+          <span class="test-icon">${r.passed ? '✓' : '✗'}</span>
+          <span>${r.name}</span>
+        </div>
+      `).join('');
+    }
+
+    // Wait a tick for all test scripts to complete
+    setTimeout(() => {
+      const r = window.__csaTestResults || {};
+      renderSuite('suite-credential', r.credentialManager);
+      renderSuite('suite-rate', r.rateLimiter);
+      renderSuite('suite-markdown', r.markdownRenderer);
+      renderSuite('suite-dom', r.domExtractor);
+
+      // Summary
+      let total = 0, passed = 0, failed = 0;
+      Object.values(r).forEach(suite => {
+        total += suite.total;
+        passed += suite.passed;
+        failed += suite.failed;
+      });
+
+      const summary = document.getElementById('summary');
+      summary.style.display = 'block';
+      document.getElementById('summary-total').textContent = `${passed}/${total}`;
+      document.getElementById('summary-total').style.color = failed > 0 ? '#dc2626' : '#059669';
+      document.getElementById('summary-label').textContent = failed > 0
+        ? `tests passed (${failed} failed)`
+        : 'all tests passed';
+    }, 100);
+  </script>
+</body>
+</html>

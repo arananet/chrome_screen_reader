@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Screen Analyzer - Settings</title>
+  <title>Screen Analyzer — Settings</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -14,164 +14,158 @@
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      padding: 40px 20px;
+      padding: 48px 20px;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .container {
-      max-width: 560px;
-      width: 100%;
-    }
+    .container { max-width: 520px; width: 100%; }
 
-    .header {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .header h1 {
-      font-size: 24px;
-      font-weight: 700;
-      color: #111827;
-      margin-bottom: 6px;
-    }
-
-    .header p {
-      font-size: 14px;
-      color: #6b7280;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      padding: 24px;
-      margin-bottom: 20px;
-    }
-
-    .card h2 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      color: #111827;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 500;
-      color: #374151;
-      margin-bottom: 6px;
-    }
-
-    input[type="password"],
-    input[type="text"],
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: inherit;
-      color: #1f2937;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
-    input:focus, select:focus {
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
-    }
-
-    .field-group {
-      margin-bottom: 16px;
-    }
-
-    .hint {
-      font-size: 12px;
-      color: #9ca3af;
-      margin-top: 4px;
-    }
-
-    .btn-primary {
+    /* Header */
+    .header { text-align: center; margin-bottom: 32px; }
+    .header-icon {
+      width: 56px; height: 56px; border-radius: 16px;
       background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      color: #fff;
-      border: none;
-      padding: 10px 24px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.15s;
-      font-family: inherit;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 16px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
+    .header-icon svg { width: 28px; height: 28px; color: #fff; }
+    .header h1 { font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 4px; }
+    .header p { font-size: 14px; color: #6b7280; }
 
+    /* Card */
+    .card {
+      background: #fff; border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 16px;
+    }
+    .card h2 { font-size: 15px; font-weight: 600; margin-bottom: 18px; color: #111827; }
+
+    /* Fields */
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label { display: block; font-size: 13px; font-weight: 500; color: #374151; margin-bottom: 6px; }
+    .field input, .field select {
+      width: 100%; padding: 10px 12px; border: 1.5px solid #d1d5db;
+      border-radius: 8px; font-size: 14px; font-family: inherit;
+      color: #1f2937; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field input:focus, .field select:focus {
+      border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+    .hint { font-size: 12px; color: #9ca3af; margin-top: 5px; line-height: 1.5; }
+    .hint a { color: #6366f1; text-decoration: none; font-weight: 500; }
+    .hint a:hover { text-decoration: underline; }
+
+    /* Model info */
+    .model-info {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;
+    }
+    .model-badge {
+      font-size: 11px; padding: 3px 8px; border-radius: 100px;
+      background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb;
+    }
+    .model-badge.speed { background: #ecfdf5; color: #059669; border-color: #a7f3d0; }
+    .model-badge.quality { background: #eef2ff; color: #6366f1; border-color: #c7d2fe; }
+    .model-badge.cost { background: #fffbeb; color: #d97706; border-color: #fde68a; }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+    .btn {
+      padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600;
+      font-family: inherit; cursor: pointer; transition: opacity 0.15s; border: none;
+    }
+    .btn:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+    .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; }
     .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+    .btn-secondary:hover { background: #e5e7eb; }
 
+    /* Status */
     .status {
-      display: inline-block;
-      margin-left: 12px;
-      font-size: 13px;
-      font-weight: 500;
-      opacity: 0;
-      transition: opacity 0.3s;
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-left: 12px; font-size: 13px; font-weight: 500;
+      opacity: 0; transition: opacity 0.3s;
     }
-
     .status.show { opacity: 1; }
     .status.success { color: #059669; }
     .status.error { color: #dc2626; }
+    .status svg { width: 14px; height: 14px; }
 
-    .footer {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 12px;
-      color: #9ca3af;
+    /* Shortcut card */
+    .shortcut-content {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0 0;
+    }
+    .shortcut-content p { font-size: 13px; color: #4b5563; line-height: 1.5; }
+    kbd {
+      display: inline-block; padding: 3px 7px; font-size: 11px;
+      font-family: 'SF Mono', Monaco, Consolas, monospace;
+      background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 4px;
+      box-shadow: 0 1px 0 #d1d5db; color: #374151;
     }
 
-    .footer a {
-      color: #6366f1;
-      text-decoration: none;
-    }
+    /* Footer */
+    .footer { text-align: center; margin-top: 24px; font-size: 12px; color: #9ca3af; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>&#x1F50D; Screen Analyzer Settings</h1>
-      <p>Configure your Claude API key and preferences</p>
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+      </div>
+      <h1>Screen Analyzer Settings</h1>
+      <p>Configure your API key and analysis preferences</p>
     </div>
 
     <div class="card">
       <h2>API Configuration</h2>
-      <div class="field-group">
+      <div class="field">
         <label for="apiKey">Claude API Key</label>
-        <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off">
-        <p class="hint">Your API key is stored locally and never shared. Get one at <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a></p>
+        <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
+        <p class="hint">
+          Stored locally only, never synced or transmitted except to the Claude API.<br>
+          Get your key at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>
+        </p>
       </div>
-      <div class="field-group">
+      <div class="field">
         <label for="model">Model</label>
         <select id="model">
-          <option value="claude-sonnet-4-20250514">Claude Sonnet 4 (Recommended)</option>
-          <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 (Faster)</option>
-          <option value="claude-opus-4-20250514">Claude Opus 4 (Most Capable)</option>
+          <option value="claude-sonnet-4-20250514">Claude Sonnet 4 — Balanced</option>
+          <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 — Fastest</option>
+          <option value="claude-opus-4-20250514">Claude Opus 4 — Most Capable</option>
         </select>
+        <div class="model-info" id="modelInfo">
+          <span class="model-badge quality">Recommended</span>
+          <span class="model-badge speed">Fast</span>
+          <span class="model-badge cost">Moderate cost</span>
+        </div>
       </div>
-      <button class="btn-primary" id="saveBtn">Save Settings</button>
-      <span class="status" id="statusMsg"></span>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="saveBtn">Save Settings</button>
+        <button class="btn btn-secondary" id="testBtn">Test Connection</button>
+        <span class="status" id="statusMsg"></span>
+      </div>
     </div>
 
     <div class="card">
       <h2>Keyboard Shortcut</h2>
-      <p style="font-size:13px; color:#4b5563;">
-        Toggle the analyzer panel with <strong>Alt+Shift+A</strong>.<br>
-        You can customize this in <code>chrome://extensions/shortcuts</code>.
+      <div class="shortcut-content">
+        <p>Toggle the analyzer panel with <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd></p>
+      </div>
+      <p class="hint" style="margin-top: 8px;">
+        Customize at <code>chrome://extensions/shortcuts</code>
       </p>
     </div>
 
     <div class="footer">
-      <p>Chrome Screen Analyzer &mdash; By Eduardo Arana &amp; Soda &#x1F964;</p>
+      <p>Chrome Screen Analyzer v2.0 &mdash; By Eduardo Arana &amp; Soda</p>
       <p>MIT License</p>
     </div>
   </div>
 
+  <script src="lib/credential-manager.js"></script>
   <script src="options.js"></script>
 </body>
 </html>

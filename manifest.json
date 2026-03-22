@@ -1,13 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Chrome Screen Analyzer",
-  "version": "1.0.0",
-  "description": "AI-powered screen analysis using Claude. Capture and analyze any webpage content for SEO improvement, text/image enhancement, and document analysis.",
-  "author": "Eduardo Arana and Soda 🥤",
+  "version": "2.0.0",
+  "description": "AI-powered screen analysis using Claude. Capture screenshots or extract DOM content for SEO, text, image, and document analysis.",
+  "author": "Eduardo Arana and Soda",
   "permissions": [
     "activeTab",
-    "storage",
-    "sidePanel"
+    "storage"
   ],
   "host_permissions": [
     "https://api.anthropic.com/*"
@@ -18,8 +17,13 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["content.css"]
+      "js": [
+        "lib/markdown-renderer.js",
+        "lib/dom-extractor.js",
+        "content.js"
+      ],
+      "css": ["content.css"],
+      "run_at": "document_idle"
     }
   ],
   "action": {
@@ -46,5 +50,8 @@
       },
       "description": "Toggle the Screen Analyzer panel"
     }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 }

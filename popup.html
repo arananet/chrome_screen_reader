@@ -3,96 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      width: 280px;
+      width: 300px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #fff;
       color: #1f2937;
+      -webkit-font-smoothing: antialiased;
     }
     .popup-header {
       background: linear-gradient(135deg, #6366f1, #8b5cf6);
       color: #fff;
-      padding: 16px;
-      text-align: center;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .popup-header h1 { font-size: 15px; font-weight: 600; }
-    .popup-header p { font-size: 11px; opacity: 0.85; margin-top: 4px; }
-    .popup-body { padding: 16px; }
-    .popup-body p { font-size: 13px; color: #4b5563; margin-bottom: 12px; line-height: 1.5; }
+    .popup-header-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .popup-header-icon svg { width: 18px; height: 18px; }
+    .popup-header-text h1 { font-size: 15px; font-weight: 600; }
+    .popup-header-text p { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+    .popup-body { padding: 16px 20px; }
+
+    .status-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 8px;
+      margin-bottom: 14px; font-size: 12px; font-weight: 500;
+    }
+    .status-row.ok { background: #ecfdf5; color: #065f46; }
+    .status-row.warn { background: #fffbeb; color: #92400e; }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    }
+    .status-row.ok .status-dot { background: #059669; }
+    .status-row.warn .status-dot { background: #d97706; }
+
+    .popup-body p {
+      font-size: 12px; color: #6b7280; line-height: 1.5;
+      margin-bottom: 14px;
+    }
     .btn {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-      transition: opacity 0.15s;
-      font-family: inherit;
-      margin-bottom: 8px;
+      display: block; width: 100%; padding: 10px;
+      border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 600; font-family: inherit;
+      cursor: pointer; text-align: center;
+      transition: opacity 0.15s; margin-bottom: 8px;
     }
-    .btn:hover { opacity: 0.9; }
-    .btn-primary {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      color: #fff;
-    }
-    .btn-secondary {
-      background: #f3f4f6;
-      color: #4b5563;
-      border: 1px solid #e5e7eb;
-    }
+    .btn:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+    .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary { background: #f3f4f6; color: #4b5563; border: 1px solid #e5e7eb; }
+    .btn-secondary:hover { background: #e5e7eb; }
+
     .shortcut {
-      text-align: center;
-      font-size: 11px;
-      color: #9ca3af;
-      margin-top: 4px;
+      text-align: center; font-size: 11px; color: #9ca3af; margin-top: 6px;
     }
-    .shortcut kbd {
-      background: #f3f4f6;
-      padding: 2px 6px;
-      border-radius: 4px;
-      border: 1px solid #e5e7eb;
-      font-size: 10px;
+    kbd {
+      display: inline-block; padding: 2px 5px;
+      font-size: 10px; font-family: 'SF Mono', Monaco, Consolas, monospace;
+      background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 3px;
+      box-shadow: 0 1px 0 #e5e7eb;
     }
-    .status-badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 10px;
-      font-size: 11px;
-      font-weight: 500;
-      margin-bottom: 12px;
-    }
-    .status-badge.configured { background: #d1fae5; color: #065f46; }
-    .status-badge.not-configured { background: #fef3c7; color: #92400e; }
     .popup-footer {
-      padding: 10px 16px;
-      border-top: 1px solid #f3f4f6;
-      text-align: center;
-      font-size: 10px;
-      color: #9ca3af;
+      padding: 10px 20px; border-top: 1px solid #f3f4f6;
+      text-align: center; font-size: 10px; color: #9ca3af;
     }
   </style>
 </head>
 <body>
   <div class="popup-header">
-    <h1>&#x1F50D; Screen Analyzer</h1>
-    <p>AI-powered screen analysis</p>
+    <div class="popup-header-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+    </div>
+    <div class="popup-header-text">
+      <h1>Screen Analyzer</h1>
+      <p>AI-powered page analysis</p>
+    </div>
   </div>
+
   <div class="popup-body">
     <div id="apiStatus"></div>
-    <p>Capture the current page and analyze it with Claude AI for SEO, content, and document insights.</p>
+    <p>Capture screenshots or extract DOM content and analyze with Claude AI for SEO, content, and accessibility insights.</p>
     <button class="btn btn-primary" id="openPanel">Open Analyzer Panel</button>
     <button class="btn btn-secondary" id="openSettings">Settings</button>
     <div class="shortcut">
-      Shortcut: <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd>
+      <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd>
     </div>
   </div>
+
   <div class="popup-footer">
-    By Eduardo Arana &amp; Soda &#x1F964; &mdash; MIT License
+    By Eduardo Arana &amp; Soda &mdash; MIT License
   </div>
+
   <script src="popup.js"></script>
 </body>
 </html>
