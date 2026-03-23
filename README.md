@@ -17,8 +17,8 @@ AI-powered screen analysis Chrome extension using the Claude API. Capture screen
 - **Secure Credentials** — API key stored locally with XOR obfuscation, never synced
 - **Rate Limiting** — 2s gap + 20 requests per 10-minute window with visual indicator
 - **Markdown Responses** — Rendered with XSS-safe parser, copy-to-clipboard support
-- **Keyboard Shortcut** — `Alt+Shift+A` to toggle panel, `Ctrl+Enter` to submit, `Esc` to close
-- **Configurable Model** — Claude Sonnet 4, Haiku 4.5, or Opus 4
+- **Keyboard Shortcut** — `Alt+Shift+A` (Windows/Linux) or `Ctrl+Shift+A` (Mac) to toggle panel, `Ctrl/Cmd+Enter` to submit, `Esc` to close
+- **Configurable Model** — Claude Sonnet 4.6, Haiku 4.5, or Opus 4.6
 
 ## Use Cases
 
@@ -43,10 +43,10 @@ AI-powered screen analysis Chrome extension using the Claude API. Capture screen
 ## Usage
 
 1. Navigate to any webpage
-2. Click the floating search icon on the right edge (or press `Alt+Shift+A`)
+2. Click the floating search icon on the right edge (or press `Alt+Shift+A` / `Ctrl+Shift+A` on Mac)
 3. Choose capture mode: **Screenshot** or **DOM Analysis**
 4. Type instructions or click a quick action chip
-5. Click **Capture & Analyze** (or `Ctrl+Enter`)
+5. Click **Capture & Analyze** (or `Ctrl/Cmd+Enter`)
 6. View results in the sidebar, copy with one click
 
 ## Project Structure

@@ -55,8 +55,10 @@
     trigger.id = 'csa-floating-trigger';
     trigger.className = 'csa-pulse';
     trigger.innerHTML = ICONS.search;
-    trigger.setAttribute('aria-label', 'Open Screen Analyzer (Alt+Shift+A)');
-    trigger.setAttribute('title', 'Screen Analyzer (Alt+Shift+A)');
+    const isMac = navigator.platform.toUpperCase().includes('MAC');
+    const shortcutLabel = isMac ? 'Ctrl+Shift+A' : 'Alt+Shift+A';
+    trigger.setAttribute('aria-label', `Open Screen Analyzer (${shortcutLabel})`);
+    trigger.setAttribute('title', `Screen Analyzer (${shortcutLabel})`);
     trigger.addEventListener('click', togglePanel);
 
     // Panel
@@ -279,10 +281,22 @@
       let response;
 
       if (captureMode === 'screenshot') {
+        // Hide panel so it's not captured in the screenshot
+        const panelEl = document.getElementById('csa-panel-overlay');
+        const triggerEl = document.getElementById('csa-floating-trigger');
+        if (panelEl) panelEl.style.display = 'none';
+        if (triggerEl) triggerEl.style.display = 'none';
+        // Allow repaint before capture
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
         response = await chrome.runtime.sendMessage({
           action: 'analyzeScreen',
           prompt
         });
+
+        // Restore panel visibility
+        if (panelEl) panelEl.style.display = '';
+        if (triggerEl) triggerEl.style.display = '';
       } else {
         // DOM mode: extract DOM content in content script context
         const domData = DOMExtractor.extract();
@@ -442,7 +456,7 @@
   /* ── Helpers ─────────────────────────────────────── */
 
   function openSettings() {
-    chrome.runtime.openOptionsPage();
+    chrome.runtime.sendMessage({ action: 'openSettings' });
   }
 
   function esc(str) {

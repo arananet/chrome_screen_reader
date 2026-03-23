@@ -15,7 +15,7 @@ importScripts(
 /* ── Constants ─────────────────────────────────────── */
 
 const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages';
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+const DEFAULT_MODEL = 'claude-sonnet-4-6-20260301';
 const MAX_TOKENS = 4096;
 const MAX_PROMPT_LENGTH = 4000;
 
@@ -49,8 +49,7 @@ async function captureVisibleTab() {
   if (!tab) throw new Error('No active tab found.');
 
   const dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId, {
-    format: 'jpeg',
-    quality: 85
+    format: 'png'
   });
   return dataUrl;
 }
@@ -158,6 +157,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     case 'togglePanel':
       togglePanelInActiveTab();
+      return false;
+
+    case 'openSettings':
+      chrome.runtime.openOptionsPage();
       return false;
 
     default:
