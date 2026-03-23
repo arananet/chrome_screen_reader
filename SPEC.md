@@ -54,7 +54,7 @@ A Chrome extension (Manifest V3) that captures webpage content via **screenshot*
 
 ### 3.1 Screenshot Mode
 - Uses `chrome.tabs.captureVisibleTab()` to capture a PNG screenshot
-- Compresses to JPEG at 85% quality to reduce payload size
+- Panel and trigger are hidden before capture to avoid occluding the page
 - Sends as base64 image to Claude API vision endpoint
 - Best for: visual layout analysis, image analysis, UI/UX review
 
@@ -127,7 +127,7 @@ A Chrome extension (Manifest V3) that captures webpage content via **screenshot*
 - 44x44px touch target (WCAG minimum)
 - Fixed right edge, vertically centered
 - Smooth expand on hover (48px wide)
-- Tooltip on hover: "Screen Analyzer (Alt+Shift+A)"
+- Tooltip on hover: "Screen Analyzer (Alt+Shift+A)" (Windows/Linux) or "Screen Analyzer (Ctrl+Shift+A)" (Mac)
 - Subtle pulse animation on first install
 
 ### 5.3 Panel Layout (420px sidebar)
@@ -149,6 +149,7 @@ A Chrome extension (Manifest V3) that captures webpage content via **screenshot*
 - Focus management: trap focus in panel when open
 - `aria-live="polite"` for status updates
 - Keyboard navigable: Tab through controls, Escape to close
+- Keyboard shortcut: `Alt+Shift+A` (Windows/Linux) or `Ctrl+Shift+A` (Mac) to toggle panel, `Ctrl/Cmd+Enter` to submit
 - High contrast borders on focus (`:focus-visible`)
 - Reduced motion: respect `prefers-reduced-motion`
 
@@ -165,7 +166,7 @@ A Chrome extension (Manifest V3) that captures webpage content via **screenshot*
   "messages": [{
     "role": "user",
     "content": [
-      { "type": "image", "source": { "type": "base64", "media_type": "image/jpeg", "data": "<base64>" } },
+      { "type": "image", "source": { "type": "base64", "media_type": "image/png", "data": "<base64>" } },
       { "type": "text", "text": "<user-prompt>" }
     ]
   }]

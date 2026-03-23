@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modelInfo = document.getElementById('modelInfo');
 
   const MODEL_INFO = {
-    'claude-sonnet-4-20250514': [
+    'claude-sonnet-4-6-20260301': [
       { label: 'Recommended', cls: 'quality' },
       { label: 'Fast', cls: 'speed' },
       { label: 'Moderate cost', cls: 'cost' }
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { label: 'Lowest cost', cls: 'cost' },
       { label: 'Good for simple tasks', cls: 'quality' }
     ],
-    'claude-opus-4-20250514': [
+    'claude-opus-4-6-20260301': [
       { label: 'Most capable', cls: 'quality' },
       { label: 'Slower', cls: 'cost' },
       { label: 'Highest cost', cls: 'cost' }

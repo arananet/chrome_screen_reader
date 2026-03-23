@@ -392,11 +392,35 @@
   overflow-y: auto;
   overflow-x: hidden;
   background: var(--csa-surface);
+  display: flex;
+  flex-direction: column;
+}
+
+#csa-response-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--csa-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--csa-border);
+  flex-shrink: 0;
+}
+
+#csa-response-header .csa-header-btn {
+  width: 24px;
+  height: 24px;
+  padding: 2px;
 }
 
 #csa-response-wrapper {
   position: relative;
-  min-height: 100%;
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
 }
 
 #csa-response-content {
