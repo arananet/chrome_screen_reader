@@ -27,6 +27,8 @@
     alertCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
     key: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>',
     monitor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+    chevronDown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>',
+    chevronUp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>',
   };
 
   /* ── Quick Prompts ───────────────────────────────── */
@@ -124,6 +126,10 @@
       </div>
 
       <div id="csa-response-section" aria-live="polite" aria-atomic="false">
+        <div id="csa-response-header">
+          <span>Response</span>
+          <button class="csa-header-btn" id="csa-toggle-response-btn" aria-label="Minimize response" title="Minimize response">${ICONS.chevronDown}</button>
+        </div>
         <div id="csa-response-wrapper">
           <div id="csa-response-content">
             ${buildEmptyState()}
@@ -169,6 +175,7 @@
     panel.querySelector('#csa-close-btn').addEventListener('click', togglePanel);
     panel.querySelector('#csa-clear-btn').addEventListener('click', clearResponse);
     panel.querySelector('#csa-settings-btn').addEventListener('click', openSettings);
+    panel.querySelector('#csa-toggle-response-btn').addEventListener('click', toggleResponse);
     panel.querySelector('#csa-options-link').addEventListener('click', openSettings);
     panel.querySelector('#csa-analyze-btn').addEventListener('click', analyzeScreen);
 
@@ -353,6 +360,11 @@
   }
 
   function showResult(text) {
+    // Expand response if minimized
+    const wrapper = document.getElementById('csa-response-wrapper');
+    if (wrapper) wrapper.style.display = '';
+    updateToggleButton(false);
+
     const content = document.getElementById('csa-response-content');
     const rendered = MarkdownRenderer.render(text);
 
@@ -405,6 +417,26 @@
   function clearResponse() {
     lastRawResult = '';
     document.getElementById('csa-response-content').innerHTML = buildEmptyState();
+    // Ensure response is visible after clearing
+    const wrapper = document.getElementById('csa-response-wrapper');
+    if (wrapper) wrapper.style.display = '';
+    updateToggleButton(false);
+  }
+
+  function toggleResponse() {
+    const wrapper = document.getElementById('csa-response-wrapper');
+    if (!wrapper) return;
+    const isHidden = wrapper.style.display === 'none';
+    wrapper.style.display = isHidden ? '' : 'none';
+    updateToggleButton(!isHidden);
+  }
+
+  function updateToggleButton(collapsed) {
+    const btn = document.getElementById('csa-toggle-response-btn');
+    if (!btn) return;
+    btn.innerHTML = collapsed ? ICONS.chevronUp : ICONS.chevronDown;
+    btn.setAttribute('aria-label', collapsed ? 'Expand response' : 'Minimize response');
+    btn.setAttribute('title', collapsed ? 'Expand response' : 'Minimize response');
   }
 
   /* ── Timer ───────────────────────────────────────── */
