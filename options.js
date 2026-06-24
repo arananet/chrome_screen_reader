@@ -14,8 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const statusMsg = document.getElementById('statusMsg');
   const modelInfo = document.getElementById('modelInfo');
 
+  const DEFAULT_MODEL = 'claude-sonnet-4-6';
   const MODEL_INFO = {
-    'claude-sonnet-4-6-20260301': [
+    'claude-sonnet-4-6': [
       { label: 'Recommended', cls: 'quality' },
       { label: 'Fast', cls: 'speed' },
       { label: 'Moderate cost', cls: 'cost' }
@@ -25,12 +26,28 @@ document.addEventListener('DOMContentLoaded', () => {
       { label: 'Lowest cost', cls: 'cost' },
       { label: 'Good for simple tasks', cls: 'quality' }
     ],
-    'claude-opus-4-6-20260301': [
+    'claude-opus-4-6': [
       { label: 'Most capable', cls: 'quality' },
       { label: 'Slower', cls: 'cost' },
       { label: 'Highest cost', cls: 'cost' }
+    ],
+    'claude-opus-4-7': [
+      { label: 'Most capable', cls: 'quality' },
+      { label: 'Higher capacity', cls: 'cost' },
+      { label: 'Advanced reasoning', cls: 'quality' }
+    ],
+    'claude-opus-4-8': [
+      { label: 'Latest Opus', cls: 'quality' },
+      { label: 'Highest capability', cls: 'cost' },
+      { label: 'Best for complex tasks', cls: 'quality' }
+    ],
+    'claude-fable-5': [
+      { label: 'Experimental', cls: 'quality' },
+      { label: 'Newer family', cls: 'speed' },
+      { label: 'High-capacity', cls: 'cost' }
     ]
   };
+  const SUPPORTED_MODELS = Object.keys(MODEL_INFO);
 
   /* ── Load saved settings ─────────────────────────── */
 
@@ -42,7 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const result = await chrome.storage.local.get(['csa_model']);
-    if (result.csa_model) modelSelect.value = result.csa_model;
+    const selectedModel = SUPPORTED_MODELS.includes(result.csa_model) ? result.csa_model : DEFAULT_MODEL;
+    modelSelect.value = selectedModel;
     updateModelInfo();
   }
 

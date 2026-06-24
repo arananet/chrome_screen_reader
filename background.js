@@ -15,7 +15,7 @@ importScripts(
 /* ── Constants ─────────────────────────────────────── */
 
 const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages';
-const DEFAULT_MODEL = 'claude-sonnet-4-6-20260301';
+const DEFAULT_MODEL = 'claude-sonnet-4-6';
 const MAX_TOKENS = 4096;
 const MAX_PROMPT_LENGTH = 4000;
 
