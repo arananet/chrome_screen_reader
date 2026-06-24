@@ -207,10 +207,34 @@ async function handleAnalyze(mode, prompt, _sender, sendResponse, domContent) {
   }
 }
 
+function isInjectable(url) {
+  // Chrome blocks content-script injection on these URL schemes regardless
+  // of the <all_urls> match pattern. Sending a message to such a tab rejects
+  // with "Could not establish connection. Receiving end does not exist."
+  if (!url) return false;
+  return /^(https?|file|ftp):/i.test(url);
+}
+
 async function togglePanelInActiveTab() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (tab?.id) {
-    chrome.tabs.sendMessage(tab.id, { action: 'togglePanel' });
+  if (!tab?.id) return;
+
+  if (!isInjectable(tab.url)) {
+    // No content script can run here (chrome://, web store, new tab, PDF, etc.).
+    // Fail quietly instead of throwing an uncaught rejection.
+    return;
+  }
+
+  try {
+    await chrome.tabs.sendMessage(tab.id, { action: 'togglePanel' });
+  } catch (err) {
+    // Common when the tab loaded before the extension was (re)installed/reloaded
+    // and the content script never ran. Ask the user to refresh.
+    if (chrome.runtime.lastError || err?.message?.includes('Receiving end')) {
+      console.info('[Chrome Screen Analyzer] Panel not available on this tab — try refreshing the page.');
+    } else {
+      console.warn('[Chrome Screen Analyzer] togglePanel failed:', err);
+    }
   }
 }
 
