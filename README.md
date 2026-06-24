@@ -18,7 +18,7 @@ AI-powered screen analysis Chrome extension using the Claude API. Capture screen
 - **Rate Limiting** — 2s gap + 20 requests per 10-minute window with visual indicator
 - **Markdown Responses** — Rendered with XSS-safe parser, copy-to-clipboard support
 - **Keyboard Shortcut** — `Alt+Shift+A` (Windows/Linux) or `Ctrl+Shift+A` (Mac) to toggle panel, `Ctrl/Cmd+Enter` to submit, `Esc` to close
-- **Configurable Model** — Claude Sonnet 4.6, Haiku 4.5, or Opus 4.6
+- **Configurable Model** — Claude Sonnet 4.6, Haiku 4.5, Opus 4.6/4.7/4.8, or Fable 5
 
 ## Use Cases
 
